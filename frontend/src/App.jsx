@@ -36,7 +36,7 @@ function App() {
 
     if (!todo.completed) {
       setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 3000);
+      setTimeout(() => setShowConfetti(false), 5000);
     }
   };
 
@@ -84,7 +84,7 @@ function App() {
           {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} />}
 
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl sm:text-3xl font-bold text-blue-600">📝 Task Manager</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-blue-500">Do Kaam, Be Calm.</h1>
             <UserButton afterSignOutUrl="/" />
           </div>
 
@@ -107,62 +107,61 @@ function App() {
           </div>
 
           <ul className="space-y-2 max-h-[60vh] overflow-y-auto pr-1">
-            <AnimatePresence>
-              {todos
-                .sort((a, b) => b.completed - a.completed)
-                .map((todo) => (
-                  <motion.li
-                    key={todo._id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    layout
-                    transition={{ type: "spring", duration: 0.25 }}
-                    className={`flex justify-between items-center p-3 rounded-xl shadow-md ${todo.completed ? "bg-green-100" : "bg-gray-50"
+           <AnimatePresence>
+            {todos
+              .sort((a, b) => b.completed - a.completed)
+              .map((todo) => (
+                <motion.li
+                  key={todo._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  layout
+                  transition={{ type: "spring", duration: 0.2 }}
+                  className={`flex justify-between items-center p-3 rounded shadow ${
+                    todo.completed ? "bg-green-100" : "bg-white"
+                  }`}
+                >
+                  {editingId === todo._id ? (
+                    <input
+                      className="border p-1 w-full"
+                      value={editingText}
+                      onChange={(e) => setEditingText(e.target.value)}
+                      onBlur={() => saveEditedTodo(todo._id)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") saveEditedTodo(todo._id);
+                      }}
+                      autoFocus
+                    />
+                  ) : (
+                    <span
+                      className={`flex-1 cursor-pointer ${
+                        todo.completed ? "line-through text-gray-400" : "text-black"
                       }`}
-                  >
-                    {editingId === todo._id ? (
-                      <input
-                        className="border p-2 rounded w-full focus:outline-none"
-                        value={editingText}
-                        onChange={(e) => setEditingText(e.target.value)}
-                        onBlur={() => saveEditedTodo(todo._id)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") saveEditedTodo(todo._id);
-                        }}
-                        autoFocus
-                      />
-                    ) : (
-                      <>
-                        <span
-                          className={`flex-1 pr-4 ${todo.completed
-                              ? "line-through text-gray-400"
-                              : "text-gray-800"
-                            }`}
-                          onDoubleClick={() => {
-                            setEditingId(todo._id);
-                            setEditingText(todo.text);
-                          }}
-                        >
-                          {todo.text}
-                        </span>
+                      onDoubleClick={() => {
+                        setEditingId(todo._id);
+                        setEditingText(todo.text);
+                      }}
+                    >
+                      {todo.text}
+                    </span>
+                  )}
 
-                        <div className="flex items-center gap-3">
-                          <button onClick={() => toggleTodo(todo)} title="Mark done">
-                            <MdDone
-                              className={`w-6 h-6 ${todo.completed ? "text-green-600" : "text-gray-400 hover:text-green-600"
-                                }`}
-                            />
-                          </button>
-                          <button onClick={() => deleteTodo(todo._id)} title="Delete">
-                            <AiOutlineClose className="w-5 h-5 text-red-500 hover:text-red-700" />
-                          </button>
-                        </div>
-                      </>
-                    )}
-                  </motion.li>
-                ))}
-            </AnimatePresence>
+                  <div className="flex items-center gap-3 ml-2">
+                    <button onClick={() => toggleTodo(todo)}>
+                      <MdDone
+                        className={`w-6 h-6 ${
+                          todo.completed ? "text-green-600" : "text-gray-400 hover:text-green-600"
+                        }`}
+                      />
+                    </button>
+                    <button onClick={() => deleteTodo(todo._id)}>
+                      <AiOutlineClose className="w-5 h-5 text-red-500 hover:text-red-700" />
+                    </button>
+                  </div>
+                </motion.li>
+              ))}
+          </AnimatePresence>
           </ul>
         </SignedIn>
       </div>
