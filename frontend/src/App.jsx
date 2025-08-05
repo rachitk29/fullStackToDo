@@ -54,7 +54,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-purple-100 p-4 flex justify-center">
       <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-6 space-y-4 
-                    mt-24 sm:mt-24 md:mt-10 md:self-start transition-all duration-300">
+                    mt-24 sm:mt-20 md:mt-10 md:self-start transition-all duration-300">
         <SignedOut>
           <SignIn />
           <div className="flex items-center justify-between mb-4">
@@ -90,7 +90,7 @@ function App() {
 
           <div className="flex space-x-2">
             <input
-              className="flex-1 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="flex-1 px-2 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
               value={text}
               onChange={(e) => setText(e.target.value)}
               onKeyDown={(e) => {
@@ -99,7 +99,7 @@ function App() {
               placeholder="Add a task"
             />
             <button
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+              className="bg-blue-500 text-white px-2 py-2 rounded-lg hover:bg-blue-600 transition sm:6px"
               onClick={addTodo}
             >
               Add
