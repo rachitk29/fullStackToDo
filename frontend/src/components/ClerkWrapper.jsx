@@ -9,9 +9,7 @@ import Hero from "./Hero";
 
 function ClerkWrapper() {
   return (
-      <div className="min-h-screen w-full bg-white relative text-gray-800">
-            <div className="max-w-2xl mx-auto px-4 sm:px-8">
-
+       <div className="min-h-screen w-full bg-white relative text-gray-800">
       <div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
@@ -40,8 +38,6 @@ function ClerkWrapper() {
         </SignedOut>
       </div>
     </div>   
-    </div>   
-
   );
 }
 

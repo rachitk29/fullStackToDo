@@ -60,6 +60,13 @@ function Hero() {
       />
 
       <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-8 w-full py-10">
+        <div className="flex justify-between items-center text-gray-400 text-sm mb-4 w-full">
+          <span>IN </span>
+          <span className="flex items-center gap-1">
+            Meerut (UP), India
+          </span>
+        </div>
+
         <h1 className="text-2xl font-bold mb-4">
           Welcome, {user?.firstName || "User"} 👋
         </h1>
