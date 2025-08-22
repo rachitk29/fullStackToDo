@@ -1,51 +1,72 @@
 import React, { useState } from "react";
 import { MdDone } from "react-icons/md";
 import { AiOutlineClose } from "react-icons/ai";
-import { motion, AnimatePresence } from "framer-motion";
 import { useUser } from "@clerk/clerk-react";
 
 function Hero() {
   const { user } = useUser();
-  const [todos, setTodos] = useState([]);
-  const [text, setText] = useState("");
+  const [habits, setHabits] = useState([]);
+  const [newHabitText, setNewHabitText] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditingText] = useState("");
 
-  const addTodo = () => {
-    if (!text.trim()) return;
-    const newTodo = {
+  const addHabit = () => {
+    if (!newHabitText.trim()) return;
+    const newHabit = {
       _id: Date.now(),
-      text,
-      completed: false,
+      text: newHabitText,
+      completed: false, // Tracks completion for the current day
     };
-    setTodos([...todos, newTodo]);
-    setText("");
+    setHabits([...habits, newHabit]);
+    setNewHabitText("");
   };
 
-  const deleteTodo = (id) => {
-    setTodos(todos.filter((todo) => todo._id !== id));
+  const deleteHabit = (id) => {
+    setHabits(habits.filter((habit) => habit._id !== id));
   };
 
-  const toggleTodo = (todo) => {
-    const updated = todos.map((t) =>
-      t._id === todo._id ? { ...t, completed: !t.completed } : t
+  const toggleHabit = (habit) => {
+    const updated = habits.map((h) =>
+      h._id === habit._id ? { ...h, completed: !h.completed } : h
     );
-    setTodos(updated);
-
-   
+    setHabits(updated);
   };
 
-  const saveEditedTodo = (id) => {
-    const updatedTodos = todos.map((todo) =>
-      todo._id === id ? { ...todo, text: editingText } : todo
+  const saveEditedHabit = (id) => {
+    const updatedHabits = habits.map((habit) =>
+      habit._id === id ? { ...habit, text: editingText } : habit
     );
-    setTodos(updatedTodos);
+    setHabits(updatedHabits);
     setEditingId(null);
     setEditingText("");
   };
 
+  // Helper function to get the current day of the week
+  const getDayOfWeek = (date) => {
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    return days[date.getDay()];
+  };
+
+  // Helper function to format the date
+  const getFormattedDate = (date) => {
+    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+  };
+
+  const today = new Date();
+  const todayFormatted = getFormattedDate(today);
+  const todayDayOfWeek = getDayOfWeek(today);
+
+  // Generate an array of dates for the week
+  const weekDates = Array.from({ length: 7 }, (_, i) => {
+    const date = new Date(today);
+    date.setDate(today.getDate() - today.getDay() + i);
+    return date;
+  });
+
   return (
-    <div className="min-h-screen w-full bg-white relative text-gray-800">
+    <div className="min-h-screen w-full bg-white relative text-gray-800 dark:bg-gray-900 dark:text-gray-100">
+      {/* Background pattern */}
       <div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
@@ -58,94 +79,125 @@ function Hero() {
           backgroundSize: "40px 40px, 40px 40px, 40px 40px, 40px 40px",
         }}
       />
-
+      {/* Main content container */}
       <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-8 w-full py-10">
-        <div className="flex justify-between items-center text-gray-400 text-sm mb-4 w-full">
-          <span>IN </span>
+        {/* Date and Location */}
+        <div className="flex justify-between items-center text-gray-400 dark:text-gray-500 text-sm mb-4 w-full">
+          <span>IN</span>
           <span className="flex items-center gap-1">
             Meerut (UP), India
           </span>
         </div>
 
-        <h1 className="text-2xl font-bold mb-4">
-          Welcome, {user?.firstName || "User"} 👋
-        </h1>
-
-
-        {/* Add Todo */}
-        <div className="flex gap-2 mb-4">
-          <input
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Add a todo..."
-            className="flex-1 p-2 border rounded"
-          />
-          <button
-            onClick={addTodo}
-            className="px-4 py-2 bg-blue-600 text-white rounded"
-          >
-            Add
-          </button>
+        {/* Calendar and date display */}
+        <div className="flex justify-between items-center text-xl font-bold mb-6">
+          <div className="flex items-center gap-2">
+            <span>{todayDayOfWeek}</span>
+            <span className="text-sm text-gray-400 dark:text-gray-500">
+              <MdDone size={16} />
+            </span>
+          </div>
+          <span className="text-sm font-normal text-gray-400 dark:text-gray-500">
+            {todayFormatted}
+          </span>
+        </div>
+        
+        {/* Weekly calendar view */}
+        <div className="flex justify-center items-center gap-2 mb-6 text-gray-500 dark:text-gray-400">
+          <span className="cursor-pointer">&lt;</span>
+          {weekDates.map((date, index) => (
+            <div 
+              key={index} 
+              className={`flex flex-col items-center p-2 rounded-lg cursor-pointer ${date.getDate() === today.getDate() && date.getMonth() === today.getMonth() ? 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white' : ''}`}
+            >
+              <span className="text-xs font-semibold">{getDayOfWeek(date)}</span>
+              <span className="text-sm">{date.getDate()}</span>
+              <span className="text-xs text-gray-400">{date.toLocaleString('default', { month: 'short' })}</span>
+            </div>
+          ))}
+          <span className="cursor-pointer">&gt;</span>
         </div>
 
-        {/* Todo List */}
-        <ul>
-          {todos.map((todo) => (
-            <li
-              key={todo._id}
-              className="flex items-center justify-between p-2 mb-2 border rounded bg-white shadow"
-            >
-              {editingId === todo._id ? (
-                <>
-                  <input
-                    value={editingText}
-                    onChange={(e) => setEditingText(e.target.value)}
-                    className="flex-1 p-1 border rounded"
-                  />
-                  <button
-                    onClick={() => saveEditedTodo(todo._id)}
-                    className="ml-2 px-3 py-1 bg-green-600 text-white rounded"
-                  >
-                    Save
-                  </button>
-                </>
-              ) : (
-                <>
-                  <span
-                    className={`flex-1 ${
-                      todo.completed ? "line-through text-gray-500" : ""
-                    }`}
-                  >
-                    {todo.text}
-                  </span>
-                  <div className="flex gap-2">
+        {/* Habit input and list container */}
+        <div className="bg-gray-800 rounded-lg p-6 mb-6">
+          <div className="flex items-center gap-2 mb-4 text-gray-400">
+            <span className="text-lg">Habits</span>
+          </div>
+          
+          {/* Habit input field */}
+          <div className="relative flex items-center mb-4">
+            <input
+              value={newHabitText}
+              onChange={(e) => setNewHabitText(e.target.value)}
+              placeholder="Add a new habit..."
+              className="w-full p-3 bg-gray-700 text-white rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500"
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  addHabit();
+                }
+              }}
+            />
+          </div>
+
+          {/* Habit list */}
+          <div className="space-y-4">
+            {habits.map((habit) => (
+              <div
+                key={habit._id}
+                className="flex items-center justify-between p-3 rounded-lg bg-gray-700 shadow-md"
+              >
+                {editingId === habit._id ? (
+                  <>
+                    <input
+                      value={editingText}
+                      onChange={(e) => setEditingText(e.target.value)}
+                      className="flex-1 p-1 bg-gray-600 rounded-lg text-white"
+                    />
                     <button
-                      onClick={() => toggleTodo(todo)}
-                      className="p-1 text-green-600"
+                      onClick={() => saveEditedHabit(habit._id)}
+                      className="ml-2 px-3 py-1 bg-green-600 text-white rounded-lg"
                     >
-                      <MdDone size={20} />
+                      Save
                     </button>
-                    <button
-                      onClick={() => deleteTodo(todo._id)}
-                      className="p-1 text-red-600"
+                  </>
+                ) : (
+                  <>
+                    <span
+                      className={`flex-1 text-white ${
+                        habit.completed ? "line-through text-gray-400" : ""
+                      }`}
                     >
-                      <AiOutlineClose size={20} />
-                    </button>
-                    <button
-                      onClick={() => {
-                        setEditingId(todo._id);
-                        setEditingText(todo.text);
-                      }}
-                      className="px-2 py-1 bg-yellow-400 text-black rounded"
-                    >
-                      Edit
-                    </button>
-                  </div>
-                </>
-              )}
-            </li>
-          ))}
-        </ul>
+                      {habit.text}
+                    </span>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => toggleHabit(habit)}
+                        className={`p-1 rounded-full ${habit.completed ? 'bg-green-500 text-white' : 'bg-gray-600 text-gray-300'}`}
+                      >
+                        <MdDone size={20} />
+                      </button>
+                      <button
+                        onClick={() => deleteHabit(habit._id)}
+                        className="p-1 rounded-full bg-gray-600 text-gray-300 hover:text-red-500"
+                      >
+                        <AiOutlineClose size={20} />
+                      </button>
+                      <button
+                        onClick={() => {
+                          setEditingId(habit._id);
+                          setEditingText(habit.text);
+                        }}
+                        className="px-2 py-1 bg-yellow-400 text-black rounded-lg"
+                      >
+                        Edit
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ import Hero from "./Hero";
 
 function ClerkWrapper() {
   return (
-       <div className="min-h-screen w-full bg-white relative text-gray-800">
+       <div className="min-h-screen w-full relative  text-gray-800 dark:bg-gray-900">
       <div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
