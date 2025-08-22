@@ -4,12 +4,16 @@ import {
   SignedOut,
   SignIn,
   UserButton,
+  ClerkLoaded,
+  ClerkLoading,
 } from "@clerk/clerk-react";
 import Hero from "./Hero";
+import Header from "./Header";
 
 function ClerkWrapper() {
   return (
-       <div className="min-h-screen w-full relative  text-gray-800 dark:bg-gray-900">
+    <div className="min-h-screen w-full relative text-gray-800 dark:bg-gray-900">
+      {/* Background grid */}
       <div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
@@ -24,20 +28,36 @@ function ClerkWrapper() {
       />
 
       <div className="relative z-10">
-        <SignedIn>
-          <header className="p-4 flex justify-end">
-            <UserButton afterSignOutUrl="/" />
-          </header>
-          <Hero />
-        </SignedIn>
-
-        <SignedOut>
-          <div className="flex items-center justify-center min-h-screen">
-            <SignIn />
+        {/* While Clerk is still loading */}
+        <ClerkLoading>
+          <div className="flex items-center justify-center min-h-screen text-gray-500">
+            Loading...
           </div>
-        </SignedOut>
+        </ClerkLoading>
+
+        {/* Once Clerk has loaded */}
+        <ClerkLoaded>
+          <SignedIn>
+            {/* User button at top-right */}
+            <header className="p-4 flex justify-end">
+              <UserButton afterSignOutUrl="/" />
+            </header>
+
+            {/* Header below */}
+            <Header />
+
+            {/* Hero content */}
+            <Hero />
+          </SignedIn>
+
+          <SignedOut>
+            <div className="flex items-center justify-center min-h-screen">
+              <SignIn />
+            </div>
+          </SignedOut>
+        </ClerkLoaded>
       </div>
-    </div>   
+    </div>
   );
 }
 

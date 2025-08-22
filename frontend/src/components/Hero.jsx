@@ -15,7 +15,7 @@ function Hero() {
     const newHabit = {
       _id: Date.now(),
       text: newHabitText,
-      completed: false, // Tracks completion for the current day
+      completed: false,
     };
     setHabits([...habits, newHabit]);
     setNewHabitText("");
@@ -41,23 +41,21 @@ function Hero() {
     setEditingText("");
   };
 
-  // Helper function to get the current day of the week
+  // Helpers
   const getDayOfWeek = (date) => {
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     return days[date.getDay()];
   };
 
-  // Helper function to format the date
   const getFormattedDate = (date) => {
-    const options = { day: 'numeric', month: 'long', year: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
+    const options = { day: "numeric", month: "long", year: "numeric" };
+    return date.toLocaleDateString("en-US", options);
   };
 
   const today = new Date();
   const todayFormatted = getFormattedDate(today);
   const todayDayOfWeek = getDayOfWeek(today);
 
-  // Generate an array of dates for the week
   const weekDates = Array.from({ length: 7 }, (_, i) => {
     const date = new Date(today);
     date.setDate(today.getDate() - today.getDay() + i);
@@ -79,17 +77,11 @@ function Hero() {
           backgroundSize: "40px 40px, 40px 40px, 40px 40px, 40px 40px",
         }}
       />
-      {/* Main content container */}
-      <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-8 w-full py-10">
-        {/* Date and Location */}
-        <div className="flex justify-between items-center text-gray-400 dark:text-gray-500 text-sm mb-4 w-full">
-          <span>IN</span>
-          <span className="flex items-center gap-1">
-            Meerut (UP), India
-          </span>
-        </div>
 
-        {/* Calendar and date display */}
+      {/* Main content */}
+      <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-8 w-full py-10">
+        
+        {/* Calendar header */}
         <div className="flex justify-between items-center text-xl font-bold mb-6">
           <div className="flex items-center gap-2">
             <span>{todayDayOfWeek}</span>
@@ -101,30 +93,39 @@ function Hero() {
             {todayFormatted}
           </span>
         </div>
-        
-        {/* Weekly calendar view */}
+
+        {/* Weekly calendar */}
         <div className="flex justify-center items-center gap-2 mb-6 text-gray-500 dark:text-gray-400">
           <span className="cursor-pointer">&lt;</span>
           {weekDates.map((date, index) => (
-            <div 
-              key={index} 
-              className={`flex flex-col items-center p-2 rounded-lg cursor-pointer ${date.getDate() === today.getDate() && date.getMonth() === today.getMonth() ? 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white' : ''}`}
+            <div
+              key={index}
+              className={`flex flex-col items-center p-2 rounded-lg cursor-pointer ${
+                date.getDate() === today.getDate() &&
+                date.getMonth() === today.getMonth()
+                  ? "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white"
+                  : ""
+              }`}
             >
-              <span className="text-xs font-semibold">{getDayOfWeek(date)}</span>
+              <span className="text-xs font-semibold">
+                {getDayOfWeek(date)}
+              </span>
               <span className="text-sm">{date.getDate()}</span>
-              <span className="text-xs text-gray-400">{date.toLocaleString('default', { month: 'short' })}</span>
+              <span className="text-xs text-gray-400">
+                {date.toLocaleString("default", { month: "short" })}
+              </span>
             </div>
           ))}
           <span className="cursor-pointer">&gt;</span>
         </div>
 
-        {/* Habit input and list container */}
+        {/* Habits section */}
         <div className="bg-gray-800 rounded-lg p-6 mb-6">
           <div className="flex items-center gap-2 mb-4 text-gray-400">
             <span className="text-lg">Habits</span>
           </div>
-          
-          {/* Habit input field */}
+
+          {/* Input */}
           <div className="relative flex items-center mb-4">
             <input
               value={newHabitText}
@@ -132,7 +133,7 @@ function Hero() {
               placeholder="Add a new habit..."
               className="w-full p-3 bg-gray-700 text-white rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500"
               onKeyPress={(e) => {
-                if (e.key === 'Enter') {
+                if (e.key === "Enter") {
                   addHabit();
                 }
               }}
@@ -172,7 +173,11 @@ function Hero() {
                     <div className="flex gap-2">
                       <button
                         onClick={() => toggleHabit(habit)}
-                        className={`p-1 rounded-full ${habit.completed ? 'bg-green-500 text-white' : 'bg-gray-600 text-gray-300'}`}
+                        className={`p-1 rounded-full ${
+                          habit.completed
+                            ? "bg-green-500 text-white"
+                            : "bg-gray-600 text-gray-300"
+                        }`}
                       >
                         <MdDone size={20} />
                       </button>
