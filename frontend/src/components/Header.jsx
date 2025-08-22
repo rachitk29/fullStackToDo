@@ -3,9 +3,8 @@ import { Target, Github } from "lucide-react";
 
 function Header() {
   return (
-    <div className="mt-6 relative z-10 max-w-2xl mx-auto px-4 sm:px-8 w-full">
+    <div className="mt-4 relative z-10 max-w-2xl mx-auto px-4 sm:px-8 w-full">
       <div className="flex justify-between items-center text-sm">
-        {/* Brand / Logo */}
         <a
           href="/"
           className="flex flex-col items-center text-gray-700 dark:text-gray-300"

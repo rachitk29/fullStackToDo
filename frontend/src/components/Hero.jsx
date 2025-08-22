@@ -121,8 +121,8 @@ function Hero() {
 
         {/* Habits section */}
         <div className="bg-gray-800 rounded-lg p-6 mb-6">
-          <div className="flex items-center gap-2 mb-4 text-gray-400">
-            <span className="text-lg">Habits</span>
+          <div className="flex items-center gap-2 mb-4 text-gray-300">
+            <span className="text-lg">Do Kaam, be Calm</span>
           </div>
 
           {/* Input */}

@@ -3,12 +3,12 @@ import {
   SignedIn,
   SignedOut,
   SignIn,
-  UserButton,
   ClerkLoaded,
   ClerkLoading,
 } from "@clerk/clerk-react";
 import Hero from "./Hero";
 import Header from "./Header";
+import CustomUserButton from "./CustomUserButton";
 
 function ClerkWrapper() {
   return (
@@ -31,22 +31,19 @@ function ClerkWrapper() {
         {/* While Clerk is still loading */}
         <ClerkLoading>
           <div className="flex items-center justify-center min-h-screen text-gray-500">
-            Loading...
+            Loading...⌛
           </div>
         </ClerkLoading>
 
         {/* Once Clerk has loaded */}
         <ClerkLoaded>
           <SignedIn>
-            {/* User button at top-right */}
+            {/* User avatar from email (Gravatar) */}
             <header className="p-4 flex justify-end">
-              <UserButton afterSignOutUrl="/" />
+              <CustomUserButton />
             </header>
 
-            {/* Header below */}
             <Header />
-
-            {/* Hero content */}
             <Hero />
           </SignedIn>
 
