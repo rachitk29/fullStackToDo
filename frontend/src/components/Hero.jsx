@@ -50,37 +50,35 @@ function Hero() {
 
   return (
     <div className="min-h-screen w-full relative">
-      {/* Geometry Background */}
+      {/* Background with subtle grid */}
       <div
         className="absolute inset-0 z-0"
         style={{
           background: "#1c2a1f",
           backgroundImage: `
-            radial-gradient(circle, rgba(28,42,31,0.4) 1px, transparent 1px),
-            radial-gradient(circle, rgba(28,42,31,0.3) 1px, transparent 1px),
-            radial-gradient(circle, rgba(28,42,31,0.2) 1px, transparent 1px)
+            linear-gradient(90deg, rgba(28,42,31,0.3) 1px, transparent 1px),
+            linear-gradient(rgba(28,42,31,0.3) 1px, transparent 1px)
           `,
-          backgroundSize: "20px 20px, 40px 40px, 60px 60px",
-          backgroundPosition: "0 0, 10px 10px, 30px 30px",
+          backgroundSize: "25px 25px",
         }}
       />
 
       {/* Content */}
-      <div className="relative z-10 max-w-3xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col gap-6">
-        <div className="bg-[#24322b] rounded-2xl p-6 sm:p-8 shadow-lg">
+      <div className="relative z-10 max-w-3xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-12 flex flex-col gap-6">
+        <div className="bg-[#24322b] rounded-2xl p-4 sm:p-8 shadow-lg">
           {/* Input */}
-          <div className="flex items-center gap-2 mb-6">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-6">
             <input
               value={newHabitText}
               onChange={(e) => setNewHabitText(e.target.value)}
               placeholder="Add a new habit..."
-              className="flex-1 p-3 sm:p-4 bg-[#2f4639] text-white rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="flex-1 p-3 bg-[#2f4639] text-white rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
               onKeyPress={(e) => e.key === "Enter" && addHabit()}
             />
             <motion.button
               onClick={addHabit}
               whileTap={{ scale: 0.95 }}
-              className="px-3 sm:px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition"
+              className="w-full sm:w-auto px-3 sm:px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition text-sm sm:text-base"
             >
               Add
             </motion.button>
@@ -96,28 +94,28 @@ function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.25 }}
-                className="flex items-center justify-between p-4 rounded-xl bg-[#2f4639] shadow-md"
+                className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3 sm:p-4 rounded-xl bg-[#2f4639] shadow-md"
               >
                 {editingId === habit.id ? (
                   <div className="flex w-full gap-2">
                     <input
                       value={editingText}
                       onChange={(e) => setEditingText(e.target.value)}
-                      className="flex-1 p-2 bg-[#24322b] rounded-lg text-white"
+                      className="flex-1 p-2 bg-[#24322b] rounded-lg text-white text-sm"
                     />
                     <motion.button
                       onClick={() => saveEditedHabit(habit.id)}
                       whileTap={{ scale: 0.95 }}
-                      className="px-3 py-1 bg-green-400 text-white rounded-lg"
+                      className="px-3 py-1 bg-green-400 text-white rounded-lg text-sm"
                     >
                       Save
                     </motion.button>
                   </div>
                 ) : (
                   <>
-                    <div className="flex items-center gap-2 flex-1">
+                    <div className="flex items-center gap-2 flex-1 break-words">
                       {habit.completed[today] && (
-                        <MdDone size={16} className="text-green-400" />
+                        <MdDone size={16} className="text-green-400 shrink-0" />
                       )}
                       <motion.span
                         layout
@@ -125,8 +123,10 @@ function Hero() {
                           opacity: habit.completed[today] ? 0.5 : 1,
                         }}
                         transition={{ duration: 0.2 }}
-                        className={`text-white break-words ${
-                          habit.completed[today] ? "line-through text-gray-400" : ""
+                        className={`text-white text-sm sm:text-base ${
+                          habit.completed[today]
+                            ? "line-through text-gray-400"
+                            : ""
                         }`}
                       >
                         {habit.text}
@@ -134,7 +134,7 @@ function Hero() {
                     </div>
 
                     {/* Buttons */}
-                    <div className="flex items-center gap-2 sm:gap-3">
+                    <div className="flex items-center gap-2 sm:gap-3 self-end sm:self-auto">
                       <motion.button
                         whileTap={{ scale: 0.9 }}
                         onClick={() => toggleHabit(habit)}
@@ -144,14 +144,14 @@ function Hero() {
                             : "bg-gray-600 text-gray-300 hover:bg-green-500 hover:text-white"
                         }`}
                       >
-                        <MdDone size={18} />
+                        <MdDone size={16} />
                       </motion.button>
                       <motion.button
                         whileTap={{ scale: 0.9 }}
                         onClick={() => deleteHabit(habit.id)}
                         className="p-1 sm:p-2 rounded-full bg-gray-600 text-gray-300 hover:text-red-500 transition"
                       >
-                        <AiOutlineClose size={18} />
+                        <AiOutlineClose size={16} />
                       </motion.button>
                       <motion.button
                         whileTap={{ scale: 0.9 }}
@@ -159,9 +159,9 @@ function Hero() {
                           setEditingId(habit.id);
                           setEditingText(habit.text);
                         }}
-                        className="p-1 sm:px-3 sm:py-1 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition"
+                        className="p-1 sm:px-3 sm:py-1 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition text-sm"
                       >
-                        <FiEdit2 size={16} />
+                        <FiEdit2 size={14} />
                       </motion.button>
                     </div>
                   </>
@@ -171,7 +171,6 @@ function Hero() {
           </AnimatePresence>
         </div>
       </div>
-
     </div>
   );
 }
