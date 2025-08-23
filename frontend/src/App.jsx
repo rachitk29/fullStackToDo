@@ -9,36 +9,35 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowIntro(false);
-    }, 1300); 
+    }, 1500); 
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <div className="min-h bg-gray-900">
-  <AnimatePresence mode="wait">
-    {showIntro ? (
-      <motion.div
-        key="intro"
-        initial={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Intro />
-      </motion.div>
-    ) : (
-      <motion.div
-        key="app"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <ClerkWrapper />
-      </motion.div>
-    )}
-  </AnimatePresence>
-</div>
-
+    <div className="min-h-screen bg-heroBg">
+      <AnimatePresence mode="wait">
+        {showIntro ? (
+          <motion.div
+            key="intro"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Intro />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="app"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <ClerkWrapper />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 

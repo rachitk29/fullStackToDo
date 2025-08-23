@@ -10,6 +10,9 @@ export default {
         sans: ["Poppins", "sans-serif"],
         figtree: ["Figtree", "sans-serif"],
       },
+      colors: {
+          heroBg: '#1c2a1f',
+      },
     },
   },
   plugins: [],

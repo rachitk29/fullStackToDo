@@ -2,40 +2,46 @@ import React, { useState } from "react";
 import { MdDone } from "react-icons/md";
 import { AiOutlineClose } from "react-icons/ai";
 import { FiEdit2 } from "react-icons/fi";
-import { useUser } from "@clerk/clerk-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 function Hero() {
-  const { user } = useUser();
   const [habits, setHabits] = useState([]);
   const [newHabitText, setNewHabitText] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditingText] = useState("");
 
+  const today = new Date().toISOString().split("T")[0];
+
   const addHabit = () => {
     if (!newHabitText.trim()) return;
+
     const newHabit = {
-      _id: Date.now(),
+      id: Date.now(),
       text: newHabitText,
-      completed: false,
+      completed: { [today]: false },
+      priority: "medium",
+      dueTime: "",
     };
     setHabits([...habits, newHabit]);
     setNewHabitText("");
   };
 
   const deleteHabit = (id) => {
-    setHabits(habits.filter((habit) => habit._id !== id));
+    setHabits(habits.filter((habit) => habit.id !== id));
   };
 
   const toggleHabit = (habit) => {
     const updated = habits.map((h) =>
-      h._id === habit._id ? { ...h, completed: !h.completed } : h
+      h.id === habit.id
+        ? { ...h, completed: { ...h.completed, [today]: !h.completed[today] } }
+        : h
     );
     setHabits(updated);
   };
 
   const saveEditedHabit = (id) => {
-    const updatedHabits = habits.map((habit) =>
-      habit._id === id ? { ...habit, text: editingText } : habit
+    const updatedHabits = habits.map((h) =>
+      h.id === id ? { ...h, text: editingText } : h
     );
     setHabits(updatedHabits);
     setEditingId(null);
@@ -43,105 +49,126 @@ function Hero() {
   };
 
   return (
-    <div className="min-h w-full flex flex-col">
-      <div className="relative z-10 max-w-3xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1">
-        {/* Habits section */}
-        <div className="bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-lg">
+    <div className="min-h-screen w-full relative">
+      {/* Geometry Background */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          background: "#1c2a1f",
+          backgroundImage: `
+            radial-gradient(circle, rgba(28,42,31,0.4) 1px, transparent 1px),
+            radial-gradient(circle, rgba(28,42,31,0.3) 1px, transparent 1px),
+            radial-gradient(circle, rgba(28,42,31,0.2) 1px, transparent 1px)
+          `,
+          backgroundSize: "20px 20px, 40px 40px, 60px 60px",
+          backgroundPosition: "0 0, 10px 10px, 30px 30px",
+        }}
+      />
+
+      {/* Content */}
+      <div className="relative z-10 max-w-3xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col gap-6">
+        <div className="bg-[#24322b] rounded-2xl p-6 sm:p-8 shadow-lg">
           {/* Input */}
-          <div className="relative flex items-center mb-6">
+          <div className="flex items-center gap-2 mb-6">
             <input
               value={newHabitText}
               onChange={(e) => setNewHabitText(e.target.value)}
               placeholder="Add a new habit..."
-              className="w-full p-3 sm:p-4 bg-gray-700 text-white rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
-              onKeyPress={(e) => {
-                if (e.key === "Enter") {
-                  addHabit();
-                }
-              }}
+              className="flex-1 p-3 sm:p-4 bg-[#2f4639] text-white rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+              onKeyPress={(e) => e.key === "Enter" && addHabit()}
             />
-            <button
+            <motion.button
               onClick={addHabit}
-              className="ml-2 px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+              whileTap={{ scale: 0.95 }}
+              className="px-3 sm:px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition"
             >
               Add
-            </button>
+            </motion.button>
           </div>
 
-          {/* Habit list */}
-          <div className="space-y-4">
+          {/* Habit List */}
+          <AnimatePresence>
             {habits.map((habit) => (
-              <div
-                key={habit._id}
-                className="flex items-center justify-between p-4 rounded-xl bg-gray-700 shadow-md"
+              <motion.div
+                key={habit.id}
+                layout
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.25 }}
+                className="flex items-center justify-between p-4 rounded-xl bg-[#2f4639] shadow-md"
               >
-                {editingId === habit._id ? (
+                {editingId === habit.id ? (
                   <div className="flex w-full gap-2">
                     <input
                       value={editingText}
                       onChange={(e) => setEditingText(e.target.value)}
-                      className="flex-1 p-2 bg-gray-600 rounded-lg text-white"
+                      className="flex-1 p-2 bg-[#24322b] rounded-lg text-white"
                     />
-                    <button
-                      onClick={() => saveEditedHabit(habit._id)}
-                      className="px-3 py-1 bg-green-600 text-white rounded-lg"
+                    <motion.button
+                      onClick={() => saveEditedHabit(habit.id)}
+                      whileTap={{ scale: 0.95 }}
+                      className="px-3 py-1 bg-green-400 text-white rounded-lg"
                     >
                       Save
-                    </button>
+                    </motion.button>
                   </div>
                 ) : (
                   <>
-                    {/* Left side text with ✔ if completed */}
                     <div className="flex items-center gap-2 flex-1">
-                      {habit.completed && (
-                        <MdDone
-                          size={16}
-                          className="text-gray-400 opacity-70"
-                        />
+                      {habit.completed[today] && (
+                        <MdDone size={16} className="text-green-400" />
                       )}
-                      <span
+                      <motion.span
+                        layout
+                        animate={{
+                          opacity: habit.completed[today] ? 0.5 : 1,
+                        }}
+                        transition={{ duration: 0.2 }}
                         className={`text-white break-words ${
-                          habit.completed ? "line-through text-gray-400" : ""
+                          habit.completed[today] ? "line-through text-gray-400" : ""
                         }`}
                       >
                         {habit.text}
-                      </span>
+                      </motion.span>
                     </div>
 
-                    {/* Right side buttons */}
+                    {/* Buttons */}
                     <div className="flex items-center gap-2 sm:gap-3">
-                      <button
+                      <motion.button
+                        whileTap={{ scale: 0.9 }}
                         onClick={() => toggleHabit(habit)}
                         className={`p-1 sm:p-2 rounded-full transition ${
-                          habit.completed
+                          habit.completed[today]
                             ? "bg-green-500 text-white"
                             : "bg-gray-600 text-gray-300 hover:bg-green-500 hover:text-white"
                         }`}
                       >
-                        <MdDone size={18} className="sm:size-20" />
-                      </button>
-                      <button
-                        onClick={() => deleteHabit(habit._id)}
+                        <MdDone size={18} />
+                      </motion.button>
+                      <motion.button
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => deleteHabit(habit.id)}
                         className="p-1 sm:p-2 rounded-full bg-gray-600 text-gray-300 hover:text-red-500 transition"
                       >
-                        <AiOutlineClose size={18} className="sm:size-20" />
-                      </button>
-                      <button
+                        <AiOutlineClose size={18} />
+                      </motion.button>
+                      <motion.button
+                        whileTap={{ scale: 0.9 }}
                         onClick={() => {
-                          setEditingId(habit._id);
+                          setEditingId(habit.id);
                           setEditingText(habit.text);
                         }}
                         className="p-1 sm:px-3 sm:py-1 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition"
                       >
-                        <FiEdit2 size={16} className="sm:size-18" />
-                      </button>
+                        <FiEdit2 size={16} />
+                      </motion.button>
                     </div>
-                    <span>made by rachit</span>
                   </>
                 )}
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </AnimatePresence>
         </div>
       </div>
 

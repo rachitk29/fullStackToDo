@@ -4,9 +4,8 @@ import logo from "../assets/logo.png";
 
 function Header() {
   return (
-    <div className="mt-4 relative z-10 max-w-2xl mx-auto px-4 sm:px-8 w-full">
+    <div className="mt-4 relative z-10 bg-heroBg max-w-2xl mx-auto px-4 sm:px-8 w-full">
       <div className="flex justify-between items-center text-sm">
-        {/* Logo + Target */}
         <a
           href="/"
           className="flex items-center space-x-2 text-gray-300 "
@@ -19,7 +18,6 @@ function Header() {
           />
         </a>
 
-        {/* GitHub link */}
         <a
           href="https://github.com/rachitk29"
           target="_blank"
