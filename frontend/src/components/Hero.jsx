@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { MdDone } from "react-icons/md";
 import { AiOutlineClose } from "react-icons/ai";
+import { FiEdit2 } from "react-icons/fi";
 import { useUser } from "@clerk/clerk-react";
 
 function Hero() {
@@ -41,103 +42,30 @@ function Hero() {
     setEditingText("");
   };
 
-  // Helpers
-  const getDayOfWeek = (date) => {
-    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    return days[date.getDay()];
-  };
-
-  const getFormattedDate = (date) => {
-    const options = { day: "numeric", month: "long", year: "numeric" };
-    return date.toLocaleDateString("en-US", options);
-  };
-
-  const today = new Date();
-  const todayFormatted = getFormattedDate(today);
-  const todayDayOfWeek = getDayOfWeek(today);
-
-  const weekDates = Array.from({ length: 7 }, (_, i) => {
-    const date = new Date(today);
-    date.setDate(today.getDate() - today.getDay() + i);
-    return date;
-  });
-
   return (
-    <div className="min-h-2xl w-full bg-white relative text-gray-800 dark:bg-gray-900 dark:text-gray-100">
-      {/* Background pattern */}
-      <div
-        className="absolute inset-0 z-0 pointer-events-none"
-        style={{
-          backgroundImage: `
-            repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(75, 85, 99, 0.08) 19px, rgba(75, 85, 99, 0.08) 20px, transparent 20px, transparent 39px, rgba(75, 85, 99, 0.08) 39px, rgba(75, 85, 99, 0.08) 40px),
-            repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(75, 85, 99, 0.08) 19px, rgba(75, 85, 99, 0.08) 20px, transparent 20px, transparent 39px, rgba(75, 85, 99, 0.08) 39px, rgba(75, 85, 99, 0.08) 40px),
-            radial-gradient(circle at 20px 20px, rgba(55, 65, 81, 0.12) 2px, transparent 2px),
-            radial-gradient(circle at 40px 40px, rgba(55, 65, 81, 0.12) 2px, transparent 2px)
-          `,
-          backgroundSize: "40px 40px, 40px 40px, 40px 40px, 40px 40px",
-        }}
-      />
-
-      {/* Main content */}
-      <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-8 w-full py-10">
-        
-        {/* Calendar header */}
-        <div className="flex justify-between items-center text-xl font-bold mb-6">
-          <div className="flex items-center gap-2">
-            <span>{todayDayOfWeek}</span>
-            <span className="text-sm text-gray-400 dark:text-gray-500">
-              <MdDone size={16} />
-            </span>
-          </div>
-          <span className="text-sm font-normal text-gray-400 dark:text-gray-500">
-            {todayFormatted}
-          </span>
-        </div>
-
-        {/* Weekly calendar */}
-        <div className="flex justify-center items-center gap-2 mb-6 text-gray-500 dark:text-gray-400">
-          <span className="cursor-pointer">&lt;</span>
-          {weekDates.map((date, index) => (
-            <div
-              key={index}
-              className={`flex flex-col items-center p-2 rounded-lg cursor-pointer ${
-                date.getDate() === today.getDate() &&
-                date.getMonth() === today.getMonth()
-                  ? "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white"
-                  : ""
-              }`}
-            >
-              <span className="text-xs font-semibold">
-                {getDayOfWeek(date)}
-              </span>
-              <span className="text-sm">{date.getDate()}</span>
-              <span className="text-xs text-gray-400">
-                {date.toLocaleString("default", { month: "short" })}
-              </span>
-            </div>
-          ))}
-          <span className="cursor-pointer">&gt;</span>
-        </div>
-
+    <div className="min-h-screen w-full bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col">
+      <div className="relative z-10 max-w-3xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1">
         {/* Habits section */}
-        <div className="bg-gray-800 rounded-lg p-6 mb-6">
-          <div className="flex items-center gap-2 mb-4 text-gray-300">
-            <span className="text-lg">Do Kaam, be Calm</span>
-          </div>
-
+        <div className="bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-lg">
           {/* Input */}
-          <div className="relative flex items-center mb-4">
+          <div className="relative flex items-center mb-6">
             <input
               value={newHabitText}
               onChange={(e) => setNewHabitText(e.target.value)}
               placeholder="Add a new habit..."
-              className="w-full p-3 bg-gray-700 text-white rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full p-3 sm:p-4 bg-gray-700 text-white rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
               onKeyPress={(e) => {
                 if (e.key === "Enter") {
                   addHabit();
                 }
               }}
             />
+            <button
+              onClick={addHabit}
+              className="ml-2 px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+            >
+              Add
+            </button>
           </div>
 
           {/* Habit list */}
@@ -145,56 +73,67 @@ function Hero() {
             {habits.map((habit) => (
               <div
                 key={habit._id}
-                className="flex items-center justify-between p-3 rounded-lg bg-gray-700 shadow-md"
+                className="flex items-center justify-between p-4 rounded-xl bg-gray-700 shadow-md"
               >
                 {editingId === habit._id ? (
-                  <>
+                  <div className="flex w-full gap-2">
                     <input
                       value={editingText}
                       onChange={(e) => setEditingText(e.target.value)}
-                      className="flex-1 p-1 bg-gray-600 rounded-lg text-white"
+                      className="flex-1 p-2 bg-gray-600 rounded-lg text-white"
                     />
                     <button
                       onClick={() => saveEditedHabit(habit._id)}
-                      className="ml-2 px-3 py-1 bg-green-600 text-white rounded-lg"
+                      className="px-3 py-1 bg-green-600 text-white rounded-lg"
                     >
                       Save
                     </button>
-                  </>
+                  </div>
                 ) : (
                   <>
-                    <span
-                      className={`flex-1 text-white ${
-                        habit.completed ? "line-through text-gray-400" : ""
-                      }`}
-                    >
-                      {habit.text}
-                    </span>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => toggleHabit(habit)}
-                        className={`p-1 rounded-full ${
-                          habit.completed
-                            ? "bg-green-500 text-white"
-                            : "bg-gray-600 text-gray-300"
+                    {/* Left side text with ✔ if completed */}
+                    <div className="flex items-center gap-2 flex-1">
+                      {habit.completed && (
+                        <MdDone
+                          size={16}
+                          className="text-gray-400 opacity-70"
+                        />
+                      )}
+                      <span
+                        className={`text-white break-words ${
+                          habit.completed ? "line-through text-gray-400" : ""
                         }`}
                       >
-                        <MdDone size={20} />
+                        {habit.text}
+                      </span>
+                    </div>
+
+                    {/* Right side buttons */}
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <button
+                        onClick={() => toggleHabit(habit)}
+                        className={`p-1 sm:p-2 rounded-full transition ${
+                          habit.completed
+                            ? "bg-green-500 text-white"
+                            : "bg-gray-600 text-gray-300 hover:bg-green-500 hover:text-white"
+                        }`}
+                      >
+                        <MdDone size={18} className="sm:size-20" />
                       </button>
                       <button
                         onClick={() => deleteHabit(habit._id)}
-                        className="p-1 rounded-full bg-gray-600 text-gray-300 hover:text-red-500"
+                        className="p-1 sm:p-2 rounded-full bg-gray-600 text-gray-300 hover:text-red-500 transition"
                       >
-                        <AiOutlineClose size={20} />
+                        <AiOutlineClose size={18} className="sm:size-20" />
                       </button>
                       <button
                         onClick={() => {
                           setEditingId(habit._id);
                           setEditingText(habit.text);
                         }}
-                        className="px-2 py-1 bg-yellow-400 text-black rounded-lg"
+                        className="p-1 sm:px-3 sm:py-1 bg-yellow-400 text-black rounded-lg hover:bg-yellow-500 transition"
                       >
-                        Edit
+                        <FiEdit2 size={16} className="sm:size-18" />
                       </button>
                     </div>
                   </>
