@@ -33,30 +33,25 @@ function Intro({ onFinish }) {
   }, [done, onFinish]);
 
   return (
-  <motion.div
-  className="flex flex-col font-semibold items-center justify-center h-screen w-screen bg-gray-900 text-white overflow-hidden"
-  initial={{ opacity: 1 }}
-  exit={{ opacity: 0 }}
-  transition={{ duration: 0.5 }}
->
-  <motion.div
-    initial={{ y: 100, opacity: 0 }}
-    animate={{ y: 0, opacity: 1 }}
-    transition={{ duration: 0.5, ease: "easeOut" }}
-    className="flex flex-col items-center text-center px-4"
-  >
-    <img
-      src={logo}
-      alt="Karmly Logo"
-      className="w-24 max-w-[150px] h-auto mb-2"
-    />
-    <p className="mt-1 text-sm text-gray-400 min-h-[20px]">
-      {displayedText}
-      {!done && <span className="animate-pulse">|</span>}
-    </p>
-  </motion.div>
-</motion.div>
-
+    <motion.div
+      className="flex flex-col font-semibold items-center justify-center min-h-screen bg-gray-900 text-white overflow-hidden"
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.div
+        initial={{ y: 100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="flex flex-col items-center"
+      >
+        <img src={logo} alt="Karmly Logo" className="w-24 max-w-[150px] h-auto mb-2" />
+        <p className="mt-1 text-sm text-gray-400 min-h-[20px]">
+          {displayedText}
+          {!done && <span className="animate-pulse">|</span>}
+        </p>
+      </motion.div>
+    </motion.div>
   );
 }
 

@@ -43,7 +43,7 @@ function Hero() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col">
+    <div className="min-h w-full bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col">
       <div className="relative z-10 max-w-3xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1">
         {/* Habits section */}
         <div className="bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-lg">
