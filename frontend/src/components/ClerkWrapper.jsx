@@ -5,15 +5,16 @@ import {
   SignIn,
   ClerkLoaded,
   ClerkLoading,
+  UserButton,   
 } from "@clerk/clerk-react";
+
 import Hero from "./Hero";
+import Intro from "./Intro";
 import Header from "./Header";
-import CustomUserButton from "./CustomUserButton";
 
 function ClerkWrapper() {
   return (
     <div className="min-h-screen w-full relative text-gray-800 dark:bg-gray-900">
-      {/* Background grid */}
       <div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
@@ -28,19 +29,13 @@ function ClerkWrapper() {
       />
 
       <div className="relative z-10">
-        {/* While Clerk is still loading */}
         <ClerkLoading>
-          <div className="flex items-center justify-center min-h-screen text-gray-500">
-            Loading...⌛
-          </div>
-        </ClerkLoading>
-
-        {/* Once Clerk has loaded */}
+  <Intro />
+</ClerkLoading>
         <ClerkLoaded>
           <SignedIn>
-            {/* User avatar from email (Gravatar) */}
             <header className="p-4 flex justify-end">
-              <CustomUserButton />
+              <UserButton afterSignOutUrl="/" />
             </header>
 
             <Header />

@@ -63,7 +63,7 @@ function Hero() {
   });
 
   return (
-    <div className="min-h-screen w-full bg-white relative text-gray-800 dark:bg-gray-900 dark:text-gray-100">
+    <div className="min-h-2xl w-full bg-white relative text-gray-800 dark:bg-gray-900 dark:text-gray-100">
       {/* Background pattern */}
       <div
         className="absolute inset-0 z-0 pointer-events-none"
