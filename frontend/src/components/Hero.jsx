@@ -136,6 +136,7 @@ function Hero() {
                         <FiEdit2 size={16} className="sm:size-18" />
                       </button>
                     </div>
+                    <span>made by rachit</span>
                   </>
                 )}
               </div>
@@ -143,6 +144,7 @@ function Hero() {
           </div>
         </div>
       </div>
+
     </div>
   );
 }

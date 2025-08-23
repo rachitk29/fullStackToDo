@@ -3,7 +3,8 @@ import { motion } from "framer-motion";
 import logo from "../assets/logo.png";
 
 function Intro({ onFinish }) {
-  const fullText = "Organize. Focus. Achieve";
+  // const fullText = "Organize. Focus. Achieve";
+  const fullText = "Do some kaam & be Calm";
   const [displayedText, setDisplayedText] = useState("");
   const [done, setDone] = useState(false);
 
