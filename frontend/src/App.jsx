@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Intro from "./components/Intro";
-import ClerkWrapper from "./components/ClerkWrapper";
 import { motion, AnimatePresence } from "framer-motion";
+import Hero from "./components/Hero"
 
 function App() {
   const [showIntro, setShowIntro] = useState(true);
@@ -9,13 +9,13 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowIntro(false);
-    }, 1500); 
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <div className="min-h-screen bg-heroBg">
+    <div className="min-h-screen bg-TaskContainerBg">
       <AnimatePresence mode="wait">
         {showIntro ? (
           <motion.div
@@ -33,12 +33,13 @@ function App() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <ClerkWrapper />
+            <Hero />
           </motion.div>
         )}
       </AnimatePresence>
     </div>
   );
+
 }
 
 export default App;
