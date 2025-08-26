@@ -9,7 +9,7 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowIntro(false);
-    }, 1500);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -21,17 +21,17 @@ function App() {
           <motion.div
             key="intro"
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
+            exit={{ opacity: 1}}
+            transition={{ duration: 1 }}
           >
             <Intro />
           </motion.div>
         ) : (
           <motion.div
             key="app"
-            initial={{ opacity: 0 }}
+            initial={{ opacity: 6}}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 1 }}
           >
             <Hero />
           </motion.div>
